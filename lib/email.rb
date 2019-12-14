@@ -73,7 +73,7 @@ class Email
     text << "\n\n"
     text = text.sub(/\s+$/, "\n\n")
     assets.each do |asset|
-      url = URI.encode("/#{asset[:path]}")
+      url = URI.encode("/weihnachten/#{asset[:path]}")
       text << "![#{asset[:filename]}](#{url})\n\n"
     end
 
@@ -102,7 +102,7 @@ class Email
         if cid.match?(/^cid:/)
           part = cid_part(cid)
           asset = asset_from_part(part)
-          img['src'] = URI.encode("/#{asset[:path]}")
+          img['src'] = URI.encode("/weihnachten/#{asset[:path]}")
           @assets << asset
         end
       end
@@ -112,7 +112,7 @@ class Email
         if cid.match?(/^cid:/)
           part = cid_part(cid)
           asset = asset_from_part(part)
-          node['background'] = URI.encode("/#{asset[:path]}")
+          node['background'] = URI.encode("/weihnachten/#{asset[:path]}")
           @assets << asset
         end
       end
