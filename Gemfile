@@ -32,3 +32,5 @@ gem "byebug"
 gem "mail"
 gem "nokogumbo"
 gem "mini_magick"
+gem 'google-api-client'
+gem 'rake'

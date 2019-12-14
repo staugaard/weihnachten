@@ -1,9 +1,39 @@
 require 'mail'
 require 'nokogumbo'
+require 'mini_magick'
+require 'fileutils'
 
 class Email
   def initialize(path)
     @path = path
+  end
+
+  def generate_post
+    puts "Generating #{date} #{subject}"
+    extension = html? ? 'html' : 'md'
+    file_name = "./_posts/#{date}-#{subject}.#{extension}"
+    File.open(file_name, 'w') do |f|
+      f.puts('---')
+      f.puts('layout: post')
+      f.puts("title:  #{subject.inspect}")
+      f.puts("date: #{date}")
+      # f.puts('categories: jekyll update')
+      f.puts('---')
+      f.write(body)
+    end
+
+    assets.each do |asset|
+      FileUtils.mkdir_p(asset[:directory])
+      File.open(asset[:path], 'wb') do |f|
+        f.write(asset[:content])
+      end
+
+      if asset[:content_type].match?(/^image\//)
+        image = MiniMagick::Image.open(asset[:path])
+        oriented = image.auto_orient
+        oriented.write(asset[:path])
+      end
+    end
   end
 
   def mail
