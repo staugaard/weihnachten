@@ -1,0 +1,35 @@
+#!/usr/bin/env ruby
+
+require 'byebug'
+require 'fileutils'
+require 'mini_magick'
+require_relative './lib/email'
+
+Dir.glob('./emails/*.eml') do |path|
+  email = Email.new(path)
+  puts "#{email.date} #{email.subject}"
+  extension = email.html? ? 'html' : 'md'
+  file_name = "./_posts/#{email.date}-#{email.subject}.#{extension}"
+  File.open(file_name, 'w') do |f|
+    f.puts('---')
+    f.puts('layout: post')
+    f.puts("title:  #{email.subject.inspect}")
+    f.puts("date: #{email.date}")
+    # f.puts('categories: jekyll update')
+    f.puts('---')
+    f.write(email.body)
+  end
+
+  email.assets.each do |asset|
+    FileUtils.mkdir_p(asset[:directory])
+    File.open(asset[:path], 'wb') do |f|
+      f.write(asset[:content])
+    end
+
+    if asset[:content_type].match?(/^image\//)
+      image = MiniMagick::Image.open(asset[:path])
+      oriented = image.auto_orient
+      oriented.write(asset[:path])
+    end
+  end
+end
