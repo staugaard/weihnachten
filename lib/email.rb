@@ -9,6 +9,11 @@ class Email
   end
 
   def generate_post
+    if subject.match?(/^AW:/i) || subject.match?(/^RE:/i)
+      puts "Skipping #{date} #{subject}"
+      return
+    end
+
     puts "Generating #{date} #{subject}"
     extension = html? ? 'html' : 'md'
     file_name = "./_posts/#{date}-#{subject}.#{extension}"
@@ -23,6 +28,7 @@ class Email
     end
 
     assets.each do |asset|
+      next if File.exist?(asset[:path])
       FileUtils.mkdir_p(asset[:directory])
       File.open(asset[:path], 'wb') do |f|
         f.write(asset[:content])
@@ -49,7 +55,7 @@ class Email
 
     if !subject.include?("#{sent_at.day}.")
       day_from_subject = subject.match(/(\d+)\.12/)&.to_a&.last&.to_i
-      return Date.parse("#{sent_at.year}-#{sent_at.month}-#{day_from_subject}")
+      return Date.parse("#{sent_at.year}-#{sent_at.month}-#{day_from_subject}") if day_from_subject
     end
 
     sent_at
