@@ -2,6 +2,7 @@ require 'mail'
 require 'nokogumbo'
 require 'mini_magick'
 require 'fileutils'
+require 'byebug'
 
 class Email
   def initialize(path)
@@ -62,7 +63,8 @@ class Email
   end
 
   def body
-    html? ? html_body : markdown_body
+    dirty_body = html? ? html_body : markdown_body
+    clean_body(dirty_body)
   end
 
   def html_doc
@@ -151,5 +153,19 @@ class Email
       content: part.decoded,
       content_type: part.content_type
     }
+  end
+
+  def clean_body(body)
+    config = YAML.load(File.read('data_cleanup.yml'))
+
+    config['redact']['words'].each do |word|
+      body = body.gsub(word, "😎")
+    end
+
+    config['redact']['email_domains'].each do |domain|
+      body = body.gsub(/[\w\.\+-]+@#{domain}/, "😎")
+    end
+
+    body
   end
 end

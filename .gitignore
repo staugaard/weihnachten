@@ -6,3 +6,4 @@ vendor
 emails
 credentials.json
 token.yaml
+data_cleanup.yml
