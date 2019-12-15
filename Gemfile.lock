@@ -56,6 +56,9 @@ GEM
       sassc (> 2.0.1, < 3.0)
     jekyll-seo-tag (2.6.1)
       jekyll (>= 3.3, < 5.0)
+    jekyll-theme-white-xmas (0.1.0)
+      jekyll (~> 4.0)
+      jekyll-seo-tag (~> 2.1)
     jekyll-watch (2.2.1)
       listen (~> 3.0)
     jwt (2.2.1)
@@ -73,10 +76,6 @@ GEM
     mini_magick (4.9.5)
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
-    minima (2.5.1)
-      jekyll (>= 3.5, < 5.0)
-      jekyll-feed (~> 0.9)
-      jekyll-seo-tag (~> 2.1)
     multi_json (1.14.1)
     multipart-post (2.1.1)
     nokogiri (1.10.7)
@@ -124,9 +123,9 @@ DEPENDENCIES
   google-api-client
   jekyll (~> 4.0.0)
   jekyll-feed (~> 0.12)
+  jekyll-theme-white-xmas
   mail
   mini_magick
-  minima (~> 2.5)
   nokogumbo
   rake
   tzinfo (~> 1.2)

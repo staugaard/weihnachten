@@ -22,7 +22,7 @@ class Email
       f.puts('layout: post')
       f.puts("title:  #{subject.inspect}")
       f.puts("date: #{date}")
-      # f.puts('categories: jekyll update')
+      f.puts("categories: #{date.year.to_s.inspect}")
       f.puts('---')
       f.write(body)
     end
