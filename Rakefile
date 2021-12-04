@@ -22,7 +22,7 @@ def authorize
     url = authorizer.get_authorization_url(base_url: "urn:ietf:wg:oauth:2.0:oob")
     puts "Open the following URL in the browser and enter the " \
          "resulting code after authorization:\n" + url
-    code = gets
+    code = $stdin.gets
     credentials = authorizer.get_and_store_credentials_from_code(
       user_id: user_id, code: code, base_url: "urn:ietf:wg:oauth:2.0:oob"
     )
