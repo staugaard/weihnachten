@@ -68,7 +68,7 @@ class Email
   end
 
   def html_doc
-    @html_doc ||= Nokogiri::HTML5.fragment(body_part.decoded)
+    @html_doc ||= clean_html_doc(Nokogiri::HTML5.fragment(body_part.decoded))
   end
 
   def html_body
@@ -167,5 +167,11 @@ class Email
     end
 
     body
+  end
+
+  def clean_html_doc(doc)
+    doc.css('#canspamBarWrapper').remove
+    doc.css('#templateFooter').remove
+    doc
   end
 end

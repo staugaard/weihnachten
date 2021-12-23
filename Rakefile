@@ -42,6 +42,24 @@ task generate: [:delete_posts] do
   end
 end
 
+task :foo do
+  gmail = Google::Apis::GmailV1::GmailService.new
+  gmail.client_options.application_name = "Weihnachten"
+  gmail.authorization = authorize
+
+  response = gmail.list_user_messages('me', label_ids: ['Label_447071745886110511'], max_results: 500)
+  response.messages.map(&:id).each do |message_id|
+    path = "emails/#{message_id}.eml"
+    next if File.exist?(path)
+    puts "Getting message #{message_id}"
+    response = gmail.get_user_message('me', message_id, format: 'raw')
+    File.open(path, 'wb') do |f|
+      f.write(response.raw)
+    end
+    Email.new(path).generate_post
+  end
+end
+
 task :import do
   gmail = Google::Apis::GmailV1::GmailService.new
   gmail.client_options.application_name = "Weihnachten"
